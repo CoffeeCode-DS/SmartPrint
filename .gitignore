@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment secrets - never commit real .env files
+.env
+.env.local
+backend/.env
+frontend/.env
+
+# Database + runtime data
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+*.sqlite
+*.sqlite3
+data/*.db
+backend/data/*.db
+backend/data/*.db-shm
+backend/data/*.db-wal
+
+# Uploaded documents (temporary by design - never committed)
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
+
+# Frontend build output
+frontend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS/editor cruft
+.DS_Store
+# Archives & temp test artifacts
+*.zip
+print-sliced-*.pdf
+test-dummy.pdf
+test-slicer-*.pdf

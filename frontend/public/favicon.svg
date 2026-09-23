@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Ultra-vibrant saturated circular badge gradient (WhatsApp-like visibility on dark & light browser tabs) -->
+    <linearGradient id="spCircleBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff1744" />
+      <stop offset="50%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#9f1239" />
+    </linearGradient>
+
+    <!-- Glowing Rim Highlight -->
+    <linearGradient id="spRim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. WhatsApp-Style Vibrant Circular Badge -->
+  <circle cx="32" cy="32" r="30" fill="url(#spCircleBg)" stroke="url(#spRim)" stroke-width="2.5" />
+
+  <!-- 2. Clean Top Paper Sheet (High Contrast Pure White) -->
+  <path d="M22 13 C22 11.895 22.895 11 24 11 H40 C41.105 11 42 11.895 42 13 V22 H22 Z" fill="#ffffff" />
+  
+  <!-- Subtle document fold accent on top sheet -->
+  <path d="M36 11 L42 17 H36 Z" fill="#cbd5e1" opacity="0.8" />
+
+  <!-- 3. Bold Printer Chassis Body (Stark White Silhouette with Dark Slot) -->
+  <rect x="14" y="21" width="36" height="22" rx="5" fill="#ffffff" />
+
+  <!-- 4. High-contrast Laser / Spooler Slot -->
+  <rect x="20" y="30" width="24" height="4" rx="2" fill="#0f172a" />
+  
+  <!-- 5. Neon Laser Glow Inside Slot -->
+  <line x1="22" y1="32" x2="38" y2="32" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" />
+
+  <!-- 6. Output Paper Sheet Dispenser -->
+  <path d="M22 34 H42 V47 C42 48.105 41.105 49 40 49 H24 C22.895 49 22 48.105 22 47 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  
+  <!-- Crisp Document Content Lines -->
+  <rect x="26" y="38" width="12" height="2.5" rx="1.25" fill="#0f172a" opacity="0.85" />
+  <rect x="26" y="43" width="8" height="2" rx="1" fill="#64748b" opacity="0.9" />
+
+  <!-- 7. Active Status Indicator Dot (Vivid Emerald Green LED) -->
+  <circle cx="19" cy="26" r="2.2" fill="#22c55e" stroke="#ffffff" stroke-width="0.8" />
+</svg>
