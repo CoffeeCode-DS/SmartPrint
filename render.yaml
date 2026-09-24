@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: smartprint-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PRINTER_MODE
+        value: mock
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_SEED_USERNAME
+        value: admin
+      - key: ADMIN_SEED_PASSWORD
+        value: changeme123
+      - key: OPERATOR_SIGNUP_CODE
+        value: smartprint-operator-key
+      - key: FRONTEND_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
