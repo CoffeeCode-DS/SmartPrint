@@ -12,7 +12,8 @@ const env = require('../config/env');
  * explicit override) — see config/env.js for exactly how it's picked.
  */
 function buildUploadUrl(sessionId) {
-  return `${env.PUBLIC_URL}/upload/${sessionId}`;
+  const base = (env.PUBLIC_URL || '').replace(/\/+$/, '');
+  return `${base}/upload/${sessionId}`;
 }
 
 /**
