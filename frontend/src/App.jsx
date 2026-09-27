@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -9,8 +10,18 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Analytics from './pages/Analytics';
 import AuditLog from './pages/AuditLog';
+import { pingServer } from './services/api';
 
 export default function App() {
+  // Pre-warm the cloud backend as soon as the app is opened, and keep it warm every 5m
+  useEffect(() => {
+    pingServer().catch(() => {});
+    const interval = setInterval(() => {
+      pingServer().catch(() => {});
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <AuthProvider>
       <BrowserRouter>
