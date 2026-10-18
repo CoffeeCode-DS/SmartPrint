@@ -287,7 +287,7 @@ function StaffManagement() {
             </label>
             <Input
               type="email"
-              placeholder="e.g. operator@xeroxprint.com"
+              placeholder="e.g. admin@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

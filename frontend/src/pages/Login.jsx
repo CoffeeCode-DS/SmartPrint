@@ -78,7 +78,7 @@ export default function Login() {
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">Email Address</label>
               <Input
                 type="email"
-                placeholder="operator@xeroxprint.com"
+                placeholder="admin@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
