@@ -21,6 +21,17 @@ describe('Auth API', () => {
     expect(res.body.data.user.username).toBe(env.ADMIN_SEED_USERNAME);
   });
 
+  test('seeded admin can log in using email admin@gmail.com and password', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'admin@gmail.com', password: env.ADMIN_SEED_PASSWORD });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.token).toBeTruthy();
+    expect(res.body.data.user.role).toBe('ADMIN');
+    expect(res.body.data.user.email).toBe('admin@gmail.com');
+  });
+
   test('wrong password is rejected with 401', async () => {
     const res = await request(app)
       .post('/api/auth/login')

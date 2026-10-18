@@ -77,7 +77,7 @@ const env = {
   JWT_SECRET: required('JWT_SECRET', 'dev-only-insecure-secret-change-me'),
   JWT_EXPIRES_IN: required('JWT_EXPIRES_IN', '8h'),
   ADMIN_SEED_USERNAME: required('ADMIN_SEED_USERNAME', 'admin'),
-  ADMIN_SEED_EMAIL: required('ADMIN_SEED_EMAIL', 'admin@printsafe.local'),
+  ADMIN_SEED_EMAIL: required('ADMIN_SEED_EMAIL', 'admin@gmail.com'),
   ADMIN_SEED_PASSWORD: required('ADMIN_SEED_PASSWORD', 'changeme123'),
   OPERATOR_SIGNUP_CODE: process.env.OPERATOR_SIGNUP_CODE || 'smartprint-operator-key',
 

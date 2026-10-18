@@ -15,6 +15,8 @@ services:
         generateValue: true
       - key: ADMIN_SEED_USERNAME
         value: admin
+      - key: ADMIN_SEED_EMAIL
+        value: admin@gmail.com
       - key: ADMIN_SEED_PASSWORD
         value: changeme123
       - key: OPERATOR_SIGNUP_CODE

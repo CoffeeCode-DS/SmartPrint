@@ -109,12 +109,12 @@ export default function Login() {
                 variant="outline"
                 disabled={submitting}
                 onClick={async () => {
-                  setEmail('admin@printsafe.local');
+                  setEmail('admin@gmail.com');
                   setPassword('changeme123');
                   setSubmitting(true);
                   setError(null);
                   try {
-                    await login('admin@printsafe.local', 'changeme123');
+                    await login('admin@gmail.com', 'changeme123');
                     navigate(from, { replace: true });
                   } catch (err) {
                     setError(err.message);
@@ -124,7 +124,7 @@ export default function Login() {
                 }}
                 className="w-full text-xs font-mono border-dashed border-amber-500/40 text-amber-300 hover:bg-amber-500/10"
               >
-                ⚡ [DEV ONLY] 1-Click Sign In (admin@printsafe.local / changeme123)
+                ⚡ [DEV ONLY] 1-Click Sign In (admin@gmail.com / changeme123)
               </Button>
             )}
           </form>

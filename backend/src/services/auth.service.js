@@ -27,24 +27,46 @@ function sanitizeUser(user) {
 }
 
 /**
- * Creates the initial ADMIN account from env-configured seed credentials,
- * but only if no users exist yet. Safe to call on every server startup.
+ * Ensures an ADMIN account with the seed credentials exists.
+ * If an admin already exists (by email, username, or role), ensures its email
+ * matches ADMIN_SEED_EMAIL (default 'admin@gmail.com') and password matches
+ * ADMIN_SEED_PASSWORD (default 'changeme123') so that login with admin@gmail.com
+ * is guaranteed to work even on existing deployments with pre-created databases.
+ * Safe to call on every server startup.
  */
 function ensureAdminSeeded() {
-  if (usersRepo.count() > 0) return;
+  const targetUsername = env.ADMIN_SEED_USERNAME || 'admin';
+  const targetEmail = (env.ADMIN_SEED_EMAIL || 'admin@gmail.com').toLowerCase().trim();
+  const passwordHash = bcrypt.hashSync(env.ADMIN_SEED_PASSWORD || 'changeme123', SALT_ROUNDS);
 
-  const passwordHash = bcrypt.hashSync(env.ADMIN_SEED_PASSWORD, SALT_ROUNDS);
+  // 1. Check if user already exists by email, username, or role: ADMIN
+  let existingUser = usersRepo.findByEmail(targetEmail);
+  if (!existingUser) {
+    existingUser = usersRepo.findByUsername(targetUsername) || usersRepo.findFirstAdmin();
+  }
+
+  if (existingUser) {
+    usersRepo.updateAdminCredentials({
+      id: existingUser.id,
+      email: targetEmail,
+      passwordHash,
+      role: 'ADMIN',
+    });
+    return;
+  }
+
+  // 2. If no user exists at all, create fresh admin
   const user = usersRepo.create({
     id: generateSecureId(16),
-    username: env.ADMIN_SEED_USERNAME,
-    email: env.ADMIN_SEED_EMAIL || 'admin@printsafe.local',
+    username: targetUsername,
+    email: targetEmail,
     passwordHash,
     role: 'ADMIN',
   });
   logAudit({ actor: 'system', action: 'ADMIN_SEEDED', entityType: 'user', entityId: user.id });
   // eslint-disable-next-line no-console
   console.log(
-    `Seeded initial ADMIN account "${user.username}". Set ADMIN_SEED_PASSWORD in .env before first run in any real deployment.`
+    `Seeded initial ADMIN account "${user.username}" (${targetEmail}). Set ADMIN_SEED_PASSWORD in .env before first run in any real deployment.`
   );
 }
 
