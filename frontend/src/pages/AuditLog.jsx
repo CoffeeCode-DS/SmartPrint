@@ -211,7 +211,7 @@ function AuditLogTable() {
 
 function StaffManagement() {
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('OPERATOR');
   const [error, setError] = useState(null);
@@ -232,10 +232,10 @@ function StaffManagement() {
     setError(null);
     setSuccess(null);
     try {
-      await createStaffUser({ username, password, role });
-      setUsername('');
+      await createStaffUser({ email: email.trim().toLowerCase(), password, role });
+      setEmail('');
       setPassword('');
-      setSuccess(`Account "${username}" created.`);
+      setSuccess(`Account "${email}" created.`);
       setTimeout(() => setSuccess(null), 3500);
       loadUsers();
     } catch (err) {
@@ -259,9 +259,9 @@ function StaffManagement() {
           <div key={u.id} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 border border-slate-800">
             <div className="flex items-center gap-2">
               <span className="w-6 h-6 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center text-[10px] font-bold font-mono border border-slate-700">
-                {u.username.slice(0, 2).toUpperCase()}
+                {(u.email || u.username).slice(0, 2).toUpperCase()}
               </span>
-              <span className="text-xs font-semibold text-white">{u.username}</span>
+              <span className="text-xs font-semibold text-white">{u.email || u.username}</span>
             </div>
             <span
               className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider border ${
@@ -283,13 +283,13 @@ function StaffManagement() {
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
-              Username
+              Email Address
             </label>
             <Input
-              type="text"
-              placeholder="e.g. teacher_john"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="e.g. operator@xeroxprint.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="text-xs py-2 bg-slate-950 border-slate-700 text-white placeholder-slate-500 focus:border-rose-500"
             />

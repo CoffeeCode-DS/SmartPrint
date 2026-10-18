@@ -11,6 +11,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS users (
   id            TEXT PRIMARY KEY,
   username      TEXT NOT NULL UNIQUE,
+  email         TEXT UNIQUE CHECK (email IS NULL OR email LIKE '%_@__%.__%'),
   password_hash TEXT NOT NULL,
   role          TEXT NOT NULL CHECK (role IN ('ADMIN', 'OPERATOR')),
   created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),

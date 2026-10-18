@@ -145,5 +145,73 @@ describe('Auth API', () => {
     expect(loginRes.status).toBe(200);
     expect(loginRes.body.data.user.role).toBe('OPERATOR');
   });
+
+  test('POST /api/auth/register rejects invalid email format with 400', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        username: 'invalid_email_user',
+        email: 'not-an-email',
+        password: 'securepassword123',
+        inviteCode: env.OPERATOR_SIGNUP_CODE,
+      });
+    expect(res.status).toBe(400);
+    expect(res.body.error.message).toMatch(/valid email/i);
+  });
+
+  test('POST /api/auth/register succeeds with email, normalizes it, and supports login by email', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        username: 'email_operator',
+        email: 'Operator.ONE@SmartPrint.local',
+        password: 'securepassword123',
+        inviteCode: env.OPERATOR_SIGNUP_CODE,
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.user.email).toBe('operator.one@smartprint.local');
+
+    // Login using email instead of username
+    const loginRes = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'operator.one@smartprint.local', password: 'securepassword123' });
+    expect(loginRes.status).toBe(200);
+    expect(loginRes.body.data.user.username).toBe('email_operator');
+  });
+
+  test('POST /api/auth/register rejects duplicate email with 409', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        username: 'duplicate_email_user',
+        email: 'operator.one@smartprint.local',
+        password: 'securepassword123',
+        inviteCode: env.OPERATOR_SIGNUP_CODE,
+      });
+    expect(res.status).toBe(409);
+    expect(res.body.error.message).toMatch(/email address already exists/i);
+  });
+
+  test('POST /api/auth/register succeeds with ONLY email, password, and inviteCode (no username)', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        email: 'pure.email.operator@smartprint.local',
+        password: 'securepassword123',
+        inviteCode: env.OPERATOR_SIGNUP_CODE,
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.token).toBeTruthy();
+    expect(res.body.data.user.email).toBe('pure.email.operator@smartprint.local');
+    expect(res.body.data.user.username).toBeTruthy();
+
+    const loginRes = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'pure.email.operator@smartprint.local', password: 'securepassword123' });
+    expect(loginRes.status).toBe(200);
+    expect(loginRes.body.data.user.email).toBe('pure.email.operator@smartprint.local');
+  });
 });
 

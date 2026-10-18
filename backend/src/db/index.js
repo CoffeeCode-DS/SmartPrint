@@ -70,6 +70,13 @@ function applyMigrations() {
   addColumnIfMissing('audit_logs', auditColumns, 'prev_hash', `TEXT NOT NULL DEFAULT '0000000000000000000000000000000000000000000000000000000000000000'`);
   addColumnIfMissing('audit_logs', auditColumns, 'log_hash', `TEXT NOT NULL DEFAULT ''`);
 
+  const userTable = db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'users'`).get();
+  if (userTable) {
+    const userColumns = db.prepare(`PRAGMA table_info(users)`).all().map((c) => c.name);
+    addColumnIfMissing('users', userColumns, 'email', `TEXT`);
+    db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
+  }
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS printer_maintenance (
       printer_id   TEXT PRIMARY KEY,

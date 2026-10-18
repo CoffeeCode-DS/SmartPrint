@@ -7,9 +7,9 @@ import SmartPrintLogo from '../components/SmartPrintLogo';
 
 export default function Signup() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [inviteCode, setInviteCode] = useState('');
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -19,6 +19,18 @@ export default function Signup() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
+
+    const cleanUsername = username.trim().toLowerCase();
+    if (cleanUsername.length < 3) {
+      setError('Username must be at least 3 characters.');
+      return;
+    }
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailPattern.test(email.trim())) {
+      setError('Please enter a valid email address (e.g. operator@domain.com).');
+      return;
+    }
 
     if (password.length < 8) {
       setError('Password must be at least 8 characters long.');
@@ -32,7 +44,7 @@ export default function Signup() {
 
     setSubmitting(true);
     try {
-      await signup(username, password, inviteCode);
+      await signup({ username: cleanUsername, email: email.trim().toLowerCase(), password });
       navigate('/queue', { replace: true });
     } catch (err) {
       setError(err.message || 'Failed to create account.');
@@ -99,6 +111,20 @@ export default function Signup() {
             </div>
 
             <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">
+                Email Address
+              </label>
+              <Input
+                type="email"
+                placeholder="e.g. operator@xeroxprint.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="text-xs bg-slate-950 border-slate-700 text-white"
+              />
+            </div>
+
+            <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
                 Password (min 8 chars)
               </label>
@@ -124,23 +150,6 @@ export default function Signup() {
                 required
                 className="text-xs bg-slate-950 border-slate-700 text-white"
               />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Staff Invite Code / Station Key
-              </label>
-              <Input
-                type="password"
-                placeholder="Enter operator registration key"
-                value={inviteCode}
-                onChange={(e) => setInviteCode(e.target.value)}
-                required
-                className="text-xs bg-slate-950 border-slate-700 text-white"
-              />
-              <p className="text-[11px] text-slate-500 mt-1">
-                Required for station registration. Provided by station administrator.
-              </p>
             </div>
 
             {error && (

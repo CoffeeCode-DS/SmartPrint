@@ -6,7 +6,7 @@ import Input from '../components/ui/Input';
 import SmartPrintLogo from '../components/SmartPrintLogo';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -22,7 +22,7 @@ export default function Login() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(username, password);
+      await login(email.trim(), password);
       navigate(from, { replace: true });
     } catch (err) {
       setError(err.message);
@@ -75,11 +75,12 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="mt-7 space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">Username</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">Email Address</label>
               <Input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                placeholder="operator@xeroxprint.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 autoFocus
               />
@@ -108,12 +109,12 @@ export default function Login() {
                 variant="outline"
                 disabled={submitting}
                 onClick={async () => {
-                  setUsername('admin');
+                  setEmail('admin@printsafe.local');
                   setPassword('changeme123');
                   setSubmitting(true);
                   setError(null);
                   try {
-                    await login('admin', 'changeme123');
+                    await login('admin@printsafe.local', 'changeme123');
                     navigate(from, { replace: true });
                   } catch (err) {
                     setError(err.message);
@@ -123,7 +124,7 @@ export default function Login() {
                 }}
                 className="w-full text-xs font-mono border-dashed border-amber-500/40 text-amber-300 hover:bg-amber-500/10"
               >
-                ⚡ [DEV ONLY] 1-Click Sign In (admin / changeme123)
+                ⚡ [DEV ONLY] 1-Click Sign In (admin@printsafe.local / changeme123)
               </Button>
             )}
           </form>
